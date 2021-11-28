@@ -1,4 +1,4 @@
-package com.ntdtrong.news.helper
+package com.ntdtrong.news.di
 
 import com.ntdtrong.news.source.api.NewsApi
 import dagger.Module

@@ -4,23 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ntdtrong.news.R
 import com.ntdtrong.news.data.model.Article
 import com.ntdtrong.news.databinding.FragmentHomeBinding
+import com.ntdtrong.news.features.base.SwipeToRefreshFragment
 import com.ntdtrong.news.features.detail.KEY_DETAIL_URL
 import com.ntdtrong.news.features.home.adapter.ArticleAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment: Fragment(), ArticleAdapter.OnItemClickedListener {
+class HomeFragment: SwipeToRefreshFragment(), ArticleAdapter.OnItemClickedListener {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: ArticleAdapter
+    override val swipeLayout: SwipeRefreshLayout
+        get() = binding.layoutSwipeHome
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +39,7 @@ class HomeFragment: Fragment(), ArticleAdapter.OnItemClickedListener {
         setupList()
         setupObserver()
 
-        loadData()
+        refreshData()
     }
 
     override fun onArticleItemClicked(article: Article) {
@@ -45,7 +48,8 @@ class HomeFragment: Fragment(), ArticleAdapter.OnItemClickedListener {
         findNavController().navigate(R.id.action_nav_home_to_detail, bundle)
     }
 
-    private fun loadData() {
+    override fun refreshData() {
+        swipeLayout.isRefreshing = true
         viewModel.getNews("bbc-sport")
         binding.tvEmptyMessage.visibility = View.GONE
     }
@@ -59,6 +63,7 @@ class HomeFragment: Fragment(), ArticleAdapter.OnItemClickedListener {
 
     private fun setupObserver() {
         viewModel.articles.observe(viewLifecycleOwner, {
+            swipeLayout.isRefreshing = false
             if (it.isEmpty()) {
                 binding.tvEmptyMessage.visibility = View.VISIBLE
                 binding.rvNews.visibility = View.GONE

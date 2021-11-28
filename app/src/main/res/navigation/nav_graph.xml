@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.ntdtrong.news.features.home.HomeFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_nav_home_to_detail"
+            app:destination="@id/fragment_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_detail"
+        android:name="com.ntdtrong.news.features.detail.DetailFragment"
+        android:label="@string/detail"
+        tools:layout="@layout/fragment_detail" />
+
+</navigation>

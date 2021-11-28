@@ -9,6 +9,7 @@ import com.ntdtrong.news.databinding.ItemArticleBinding
 
 class ArticleItemViewHolder(private val binding: ItemArticleBinding): RecyclerView.ViewHolder(binding.root) {
     fun onBind(data: Article) {
+        itemView.tag = data
         Glide.with(binding.ivPhoto)
             .load(data.urlToImage)
             .into(binding.ivPhoto)

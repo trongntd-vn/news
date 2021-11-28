@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ntdtrong.news.R
+import com.ntdtrong.news.data.model.Article
 import com.ntdtrong.news.databinding.FragmentHomeBinding
+import com.ntdtrong.news.features.detail.KEY_DETAIL_URL
 import com.ntdtrong.news.features.home.adapter.ArticleAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), ArticleAdapter.OnItemClickedListener {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: ArticleAdapter
@@ -35,6 +39,12 @@ class HomeFragment: Fragment() {
         loadData()
     }
 
+    override fun onArticleItemClicked(article: Article) {
+        val bundle = Bundle()
+        bundle.putString(KEY_DETAIL_URL, article.url)
+        findNavController().navigate(R.id.action_nav_home_to_detail, bundle)
+    }
+
     private fun loadData() {
         viewModel.getNews("bbc-sport")
         binding.tvEmptyMessage.visibility = View.GONE
@@ -42,6 +52,7 @@ class HomeFragment: Fragment() {
 
     private fun setupList() {
         adapter = ArticleAdapter()
+        adapter.listener = this
         binding.rvNews.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         binding.rvNews.adapter = adapter
     }

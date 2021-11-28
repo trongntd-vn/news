@@ -8,6 +8,7 @@ import com.ntdtrong.news.databinding.ItemArticleBinding
 import java.util.*
 
 class ArticleAdapter : ListAdapter<Article, ArticleItemViewHolder>(ArticleItemDiffCallback()) {
+    var listener: OnItemClickedListener? = null
 
     fun updateList(list: List<Article>) {
         submitList(Collections.unmodifiableList(list))
@@ -19,7 +20,14 @@ class ArticleAdapter : ListAdapter<Article, ArticleItemViewHolder>(ArticleItemDi
     }
 
     override fun onBindViewHolder(holder: ArticleItemViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.onBind(item)
+        holder.onBind(getItem(position))
+        holder.itemView.setOnClickListener {
+            val article = it.tag as Article
+            listener?.onArticleItemClicked(article)
+        }
+    }
+
+    interface OnItemClickedListener {
+        fun onArticleItemClicked(article: Article)
     }
 }

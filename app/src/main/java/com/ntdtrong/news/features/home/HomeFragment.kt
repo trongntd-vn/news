@@ -18,10 +18,13 @@ import com.ntdtrong.news.features.home.adapter.ArticleAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment: SwipeToRefreshFragment(), ArticleAdapter.OnItemClickedListener {
+class HomeFragment : SwipeToRefreshFragment(), ArticleAdapter.OnItemClickedListener {
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
     private lateinit var adapter: ArticleAdapter
+    private var isFirstLoad = true
+    private val binding: FragmentHomeBinding
+        get() = _binding!!
     override val swipeLayout: SwipeRefreshLayout
         get() = binding.layoutSwipeHome
 
@@ -30,16 +33,21 @@ class HomeFragment: SwipeToRefreshFragment(), ArticleAdapter.OnItemClickedListen
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        if (_binding == null) {
+            _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupList()
-        setupObserver()
+        if (isFirstLoad) {
+            isFirstLoad = false
+            setupList()
+            setupObserver()
 
-        refreshData()
+            refreshData()
+        }
     }
 
     override fun onArticleItemClicked(article: Article) {
@@ -57,7 +65,12 @@ class HomeFragment: SwipeToRefreshFragment(), ArticleAdapter.OnItemClickedListen
     private fun setupList() {
         adapter = ArticleAdapter()
         adapter.listener = this
-        binding.rvNews.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+        binding.rvNews.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
         binding.rvNews.adapter = adapter
     }
 

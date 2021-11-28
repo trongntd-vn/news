@@ -62,11 +62,14 @@ dependencies {
     def glide_version = "4.11.0"
     def threetenabp_version = "1.3.1"
     def nav_version = "2.3.5"
+    def swipe_fresh_version = "1.1.0"
 
+    def mockk_version = "1.12.0"
+    def kotlinx_coroutines_version = "1.5.1"
+    def arch_core_test_version = "2.1.0"
     def junit_version = "4.13.2"
     def junit_ext_version = "1.1.3"
     def espresso_version = "3.4.0"
-    def swipe_fresh_version = "1.1.0"
 
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
@@ -89,6 +92,10 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     testImplementation "junit:junit:$junit_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinx_coroutines_version"
+    testImplementation "androidx.arch.core:core-testing:$arch_core_test_version"
+
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }

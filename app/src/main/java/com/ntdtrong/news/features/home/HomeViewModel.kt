@@ -30,8 +30,12 @@ class HomeViewModel @Inject constructor(
                 articles.postData(emptyList())
             }
             .collect {
-                articles.postData(it)
-                saveToCache(query, it)
+                val data = it.first
+                val isFromCache = it.second
+                articles.postData(data)
+                if (!isFromCache) {
+                    saveToCache(query, data)
+                }
             }
     }
 

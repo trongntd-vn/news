@@ -15,12 +15,14 @@ class NewsRepository @Inject constructor(
         if (networkHelper.isNetworkConnected()) {
             kotlin.runCatching { remoteDataSource.getNews(query) }
                 .fold({
-                    emit(it)
+                    emit(Pair(it, false))
                 }, {
-                    emit(localDataSource.getNews(query))
+                    val cachedArticles = localDataSource.getNews(query)
+                    emit(Pair(cachedArticles, true))
                 })
         } else {
-            emit(localDataSource.getNews(query))
+            val cachedArticles = localDataSource.getNews(query)
+            emit(Pair(cachedArticles, true))
         }
     }
 }

@@ -1,4 +1,5 @@
 package com.ntdtrong.news.data.model
 
-class NewsResponse {
-}
+data class NewsResponse(
+    val articles: List<Article>
+)

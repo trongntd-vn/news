@@ -1,5 +1,6 @@
 package com.ntdtrong.news.di
 
+import com.ntdtrong.news.BuildConfig
 import com.ntdtrong.news.source.api.NewsApi
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,7 @@ class ApiModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://newsapi.org/v2/")
+            .baseUrl(BuildConfig.SERVER_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
